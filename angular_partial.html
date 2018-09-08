@@ -1,0 +1,86 @@
+<!--
+	This is a partial for a portion of the entity editor.
+-->
+
+<div class="row card-row">
+	<div class="col-xs-12">
+		<p>Add details important to potential buyers, such as the number of bedrooms and bathrooms, square footage, or the lot size. You can add as many of these details as you like.</p>
+	</div>
+</div>
+
+<span
+	tour-step="details"
+	tour-step-order="40"
+	tour-step-orphan="false"
+	tour-step-on-prev="switch_tab_and_goto_step(tour, 'basics', 'basics')"
+	tour-step-on-next="switch_tab_and_goto_step(tour, 'photos', 'photos')"
+	tour-step-title="Property Details"
+	tour-step-content="Here, you can add several pre-set options like bedrooms and bathrooms, or add your own details. You can also add some additional text this page as it appears on your property site."
+>
+
+	<div class="row card-row" ng-show="starter_details.length">
+		<div class="col-sm-4">
+			<h3>Quick Add</h3>
+			<p class='text-muted'>Click one of these details to easily add them to your list.</p>
+		</div>
+		<div class="col-sm-8 starter_details">
+			<button class='btn sm white' ng-repeat="(index, detail) in starter_details" ng-click="new_detail(detail, index)">{{detail}}</button>
+		</div>
+	</div>
+
+	<div class="row card-row">
+		<div class="col-sm-4">
+			<h3>Detail List</h3>
+			<p class="text-muted">Drag and drop to re-order the list of details.</p>
+		</div>
+		<div class="col-sm-8">
+			<div class="detail_list" dnd-list="property.details">
+				<div
+					class="detail"
+					ng-class="{deleted: detail.should_delete}"
+					ng-show="!detail.do_delete"
+					ng-repeat="detail in property.details"
+					dnd-draggable="detail"
+					dnd-moved="property.details.splice($index, 1)"
+					dnd-effect-allowed="move"
+				>
+					<i class="fa fa-bars reorder"></i>
+
+					<div class="field-group">
+						<input type="text" class="form-control" ng-model="detail.name" placeholder='Name (ex. "Bedrooms")' dnd-nodrag ng-disabled="detail.should_delete">
+					</div>
+					<div class="field-group">
+						<input type="text" class="form-control" ng-model="detail.value" placeholder='Value (ex. "2.5")' dnd-nodrag ng-disabled="detail.should_delete">
+					</div>
+
+					<button class="btn sm purewhite go_back" ng-show="detail.should_delete" ng-click='detail.should_delete = !detail.should_delete'>
+						<i class="fa fa-undo"></i> Go Back
+					</button>
+
+					<button class="btn sm purewhite delete" ng-show="detail.should_delete" ng-click='detail.do_delete = true;'>
+						<i class="fa fa-trash"></i> Yes, Delete
+					</button>
+
+					<button class="btn sm purewhite delete" ng-show="!detail.should_delete" ng-click='detail.should_delete = !detail.should_delete'>
+						<i class="fa fa-trash"></i> Delete
+					</button>
+				</div>
+			</div>
+
+			<div class="detail add">
+				<button class="btn btn-block sm success" ng-click="new_detail('')"><i class="fa fa-plus"></i> Add Detail</button>
+			</div>
+		</div>
+	</div>
+
+</span>
+
+<div class="row card-row">
+	<div class="col-sm-4">
+		<h3>Additional Text</h3>
+		<p class="text-muted">Do you have any additional information you'd like to share with prospectives? Feel free to enter it here.</p>
+	</div>
+	<div class="col-sm-8 form-group">
+		<text-angular ng-model="property.details_text"></text-angular>
+	</div>
+</div>
